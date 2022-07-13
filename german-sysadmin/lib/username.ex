@@ -5,7 +5,6 @@ defmodule Username do
     built_name |> Enum.reverse()
   end
 
-  @spec sanitize(charlist()) :: charlist()
   def sanitize(username, built_name) do
     # ä becomes ae
     # ö becomes oe
