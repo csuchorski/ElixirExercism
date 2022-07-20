@@ -26,6 +26,8 @@ defmodule BoutiqueInventory do
   end
 
   def total_quantity(item) do
-    # Please implement the total_quantity/1 function
+    Enum.reduce(Map.values(item.quantity_by_size), 0, fn acc, size ->
+      acc + size
+    end)
   end
 end
