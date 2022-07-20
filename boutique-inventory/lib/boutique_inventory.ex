@@ -15,8 +15,14 @@ defmodule BoutiqueInventory do
   end
 
   def increase_quantity(item, count) do
-    # new_sizes
-    # %{item | quantity_by_size: new_sizes}
+    # creates an updated list of sizes
+    updated_sizes_map =
+      for {k, v} <- item.quantity_by_size do
+        {k, v + count}
+      end
+      |> Enum.into(%{})
+
+    %{item | quantity_by_size: updated_sizes_map}
   end
 
   def total_quantity(item) do
