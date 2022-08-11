@@ -22,8 +22,6 @@ defmodule CommunityGarden do
         {[new_plot | plots], index + 1}
       }
     end)
-
-    %Plot{plot_id: pid, registered_to: register_to}
   end
 
   def release(pid, plot_id) do
