@@ -25,7 +25,9 @@ defmodule CommunityGarden do
   end
 
   def release(pid, plot_id) do
-    # Agent.update(pid, fn [%Plot{plot_id: plot_id}, rest] -> rest end)
+    Agent.update(pid, fn {plots, index} ->
+      {Enum.filter(plots, fn plot -> plot.plot_id != plot_id end), index}
+    end)
   end
 
   def get_registration(pid, plot_id) do
