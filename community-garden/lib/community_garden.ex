@@ -6,7 +6,7 @@ end
 
 defmodule CommunityGarden do
   def start(opts \\ []) do
-    {:ok, pid} = Agent.start(fn -> {[], 0} end, opts)
+    Agent.start(fn -> {[], 0} end, opts)
   end
 
   def list_registrations(pid) do
@@ -31,6 +31,7 @@ defmodule CommunityGarden do
   end
 
   def get_registration(pid, plot_id) do
-    # Please implement the get_registration/2 function
+    Agent.get(pid, fn {plots, _index} -> plots end)
+    |> Enum.find({:not_found, "plot is unregistered"}, fn plot -> plot.plot_id == plot_id end)
   end
 end
