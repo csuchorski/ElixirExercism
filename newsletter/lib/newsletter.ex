@@ -1,6 +1,6 @@
 defmodule Newsletter do
   def read_emails(path) do
-    File.stream!(path) |> Enum.to_list() |> Enum.map(fn email -> String.trim(email) end)
+    File.read!(path) |> String.split("\n", trim: true)
   end
 
   def open_log(path) do
@@ -8,7 +8,7 @@ defmodule Newsletter do
   end
 
   def log_sent_email(pid, email) do
-    IO.write(pid, "#{email}\n")
+    IO.puts(pid, email)
   end
 
   def close_log(pid) do
