@@ -24,8 +24,11 @@ defmodule BeerSong do
   """
   @spec lyrics(Range.t()) :: String.t()
   def lyrics(range \\ 99..0) do
-    Enum.reduce(Enum.reverse(range), "", fn number, acc ->
-      verse(number) <> acc <> "\n"
-    end)
+    Enum.join(
+      for number <- range do
+        verse(number)
+      end,
+      "\n"
+    )
   end
 end
