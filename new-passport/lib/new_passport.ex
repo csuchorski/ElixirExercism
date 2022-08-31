@@ -2,9 +2,9 @@ defmodule NewPassport do
   def get_new_passport(now, birthday, form) do
     with {:ok, timestamp} <- enter_building(now),
          {:ok, manual} <- find_counter_information(now),
-         {:ok, counter_number} <- manual.(birthday),
-         {:ok, checksum} <- stamp_form(now, counter_number, form) do
-      {:ok, get_new_passport_number(now, counter_number, checksum)}
+         counter_number <- manual.(birthday),
+         {:ok, checksum} <- stamp_form(timestamp, counter_number, form) do
+      {:ok, get_new_passport_number(timestamp, counter_number, checksum)}
     else
       {:error, message} ->
         {:error, message}
