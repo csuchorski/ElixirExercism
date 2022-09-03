@@ -44,10 +44,9 @@ defmodule School do
   """
   @spec roster(school) :: [String.t()]
   def roster(school) do
-    # group_names_by_grade(school) |> Map.values() |> List.flatten()
-    # |> Enum.reduce([], fn {grade, list_of_names}, acc ->
-    #   acc ++ Enum.sort(list_of_names)
-    # end)
+    Enum.reduce(Map.keys(group_names_by_grade(school)), [], fn grade_num, acc ->
+      acc ++ grade(school, grade_num)
+    end)
   end
 
   defp check_if_student_in_roster?(school, name) do
