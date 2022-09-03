@@ -16,7 +16,7 @@ defmodule SchoolTest do
     assert School.roster(School.new()) == []
   end
 
-  @tag :pending
+  # @tag :pending
   test "Add a student" do
     {result, school} = School.add(School.new(), "Aimee", 2)
 

@@ -19,9 +19,13 @@ defmodule School do
   Add a student to a particular grade in school.
   """
   @spec add(school, String.t(), integer) :: {:ok | :error, school}
+  def add([], name, grade) do
+    {:ok, [{name, grade}]}
+  end
+
   def add(school, name, grade) do
     if !check_if_student_in_roster?(school, name) do
-      {:ok, school ++ {name, grade}}
+      {:ok, [{name, grade} | school]}
     else
       {:error, school}
     end
@@ -32,7 +36,7 @@ defmodule School do
   """
   @spec grade(school, integer) :: [String.t()]
   def grade(school, grade) do
-    group_names_by_grades(school) |> Map.get(grade, []) |> Enum.sort()
+    group_names_by_grade(school) |> Map.get(grade, []) |> Enum.sort()
   end
 
   @doc """
@@ -40,13 +44,17 @@ defmodule School do
   """
   @spec roster(school) :: [String.t()]
   def roster(school) do
+    # group_names_by_grade(school) |> Map.values() |> List.flatten()
+    # |> Enum.reduce([], fn {grade, list_of_names}, acc ->
+    #   acc ++ Enum.sort(list_of_names)
+    # end)
   end
 
   defp check_if_student_in_roster?(school, name) do
     Enum.any?(school, fn {name_from_roster, _grade} -> name_from_roster == name end)
   end
 
-  defp group_names_by_grades(school) do
+  defp group_names_by_grade(school) do
     Enum.group_by(school, &elem(&1, 1), fn {name, _grade} -> name end)
   end
 end
