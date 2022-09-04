@@ -1,7 +1,7 @@
 defmodule School do
   @moduledoc """
   Simulate students in a school.
-
+  
   Each student is in a grade.
   """
 
@@ -12,20 +12,16 @@ defmodule School do
   """
   @spec new() :: school
   def new() do
-    []
+    %{}
   end
 
   @doc """
   Add a student to a particular grade in school.
   """
   @spec add(school, String.t(), integer) :: {:ok | :error, school}
-  def add([], name, grade) do
-    {:ok, [{name, grade}]}
-  end
-
   def add(school, name, grade) do
     if !check_if_student_in_roster?(school, name) do
-      {:ok, [{name, grade} | school]}
+      {:ok, Map.update(school, grade, [name], fn names -> [name | names] end)}
     else
       {:error, school}
     end
@@ -36,7 +32,7 @@ defmodule School do
   """
   @spec grade(school, integer) :: [String.t()]
   def grade(school, grade) do
-    group_names_by_grade(school) |> Map.get(grade, []) |> Enum.sort()
+    school |> Map.get(grade, []) |> Enum.sort()
   end
 
   @doc """
@@ -44,16 +40,15 @@ defmodule School do
   """
   @spec roster(school) :: [String.t()]
   def roster(school) do
-    Enum.reduce(Map.keys(group_names_by_grade(school)), [], fn grade_num, acc ->
+    Enum.reduce(Map.keys(school), [], fn grade_num, acc ->
       acc ++ grade(school, grade_num)
     end)
   end
 
   defp check_if_student_in_roster?(school, name) do
-    Enum.any?(school, fn {name_from_roster, _grade} -> name_from_roster == name end)
-  end
-
-  defp group_names_by_grade(school) do
-    Enum.group_by(school, &elem(&1, 1), fn {name, _grade} -> name end)
+    Enum.any?(
+      Map.values(school) |> List.flatten(),
+      fn name_in_roster -> name == name_in_roster end
+    )
   end
 end
